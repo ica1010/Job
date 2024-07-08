@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECRET_KEY : Assurez-vous que cette variable est définie en production
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'your-secret-key')
@@ -111,6 +111,7 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
