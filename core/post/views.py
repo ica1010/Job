@@ -84,6 +84,6 @@ def addjob(request):
     cat = Category.objects.all()
 
     context = {
-        'cat':cat
+        'cat':cat,
     }
     return render(request, 'addjobalert.html', context)
