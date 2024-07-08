@@ -1,0 +1,223 @@
+{% extends 'admin-base.html' %} {% load static %} {% block adminblock %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="page-titles">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0)">Admin</a></li>
+                <li class="breadcrumb-item active">
+                    <a href="javascript:void(0)">Add Job</a>
+                </li>
+            </ol>
+        </div>
+        <!-- Row -->
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="row">
+                    <div class="col-xl-8">
+                        <div class="card h-auto">
+                            <div class="card-body row">
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">Job title</label>
+                                    <input type="text" class="form-control" placeholder="Job title" />
+                                </div>
+
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">Category</label>
+                                    <select class="disabling-options" style="width:100%;">
+                                        {% for cat in cat %}
+                                        <option value="{{cat.title}}">{{cat.title}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card h-auto">
+                            <div class="card-body">
+                                <label class="form-label">Description</label>
+                                <div id="ckeditor"></div>
+                             
+                                <label class="form-label mt-5"  >Requiements</label>
+                                <textarea class="form-control" id="ckeditor1" rows="5"
+                                    placeholder="" required="" id="ckeditor" spellcheck="false"></textarea>
+                                <label class="form-label mt-5">Responsability</label>
+                                <textarea class="form-control" id="ckeditor2" rows="5"
+                                    placeholder="" required="" spellcheck="false"></textarea>
+                            </div>
+                        </div>
+                        <div class="card h-auto">
+                            <div class="card-body row">
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">Experience years</label>
+                                    <input type="text" class="form-control" placeholder="5 years" />
+                                </div>
+
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">Salary</label>
+                                    <select id="dynamic-option-creation" style="width:100%;">
+                                        <option value="AL">A en discuter</option>
+                          
+                                    </select>
+                                </div>
+
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">Type of contrat</label>
+                                    <select class="default-select  form-control wide" >
+                                        <option>Full time</option>
+                                        <option>Partial time</option>
+                                        <option>Other</option>
+                                    
+                                    </select>
+                                </div>
+
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">Conpetence</label>
+                                    <select id="multi-value-select-2" style="width:100%;" multiple="multiple" >
+                                    </select>
+                                </div>
+
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">Tags</label>
+                                    <select id="multi-value-select" style="width:100%;" multiple="multiple" >
+                                    </select>
+                                </div>
+
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">Diplomes</label>
+                                    <select id="dynamic-option-creation-2" style="width:100%;">
+                                        <option value="AL">BEPC</option>
+                                        <option value="AL">BAC</option>
+                                        <option value="AL">License 1</option>
+                                        <option value="AL">License 2</option>
+                                        <option value="AL">License 3</option>
+                                        <option value="AL">Master1</option>
+                                        <option value="AL">Master2</option>
+                                        <option value="AL">Master3</option>
+                                        <option value="AL">Doctorat</option>
+                          
+                                    </select>
+                                </div>
+                  
+                                <div class="mb-3 col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Genre</label>
+                                        <select class="default-select  form-control wide" >
+                                            <option>F/H</option>
+                                            <option>H</option>
+                                            <option>F</option>
+                                        
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">Locality</label>
+                                    <input type="text" class="form-control" placeholder="Title" />
+                                </div>
+
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">Expiration date</label>
+                                    <input type="text" id="date-format" class="form-control" placeholder="Saturday 24 June 2017 - 21:44">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="right-sidebar-sticky">
+                            <div class="filter cm-content-box box-primary">
+                                <div class="content-title SlideToolHeader">
+                                    <div class="cpa">Featured Image</div>
+                                    <div class="tools">
+                                        <a href="javascript:void(0);" class="expand handle"><i
+                                                class="fal fa-angle-down"></i></a>
+                                    </div>
+                                </div>
+                                <div class="cm-content-body publish-content form excerpt">
+                                    <div class="card-body">
+                                        <div class="avatar-upload d-flex align-items-cente justify-content-center">
+                                            <div class="position-relative">
+                                                <div class="avatar-preview">
+                                                    <div id="imagePreview" style="
+                              background-image: url(images/no-img-avatar.png);
+                            "></div>
+                                                </div>
+                                                <div class="change-btn d-flex align-items-center flex-wrap">
+                                                    <input type="file" class="form-control d-none" id="imageUpload"
+                                                        accept=".png, .jpg, .jpeg" />
+                                                    <label for="imageUpload"
+                                                        class="btn btn-sm btn-primary light ms-0">Select Image</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="filter cm-content-box box-primary">
+                                <div class="content-title SlideToolHeader">
+                                    <div class="cpa">Contact informations</div>
+                                    <div class="tools">
+                                        <a href="javascript:void(0);" class="expand handle"><i
+                                                class="fal fa-angle-down"></i></a>
+                                    </div>
+                                </div>
+                                <div class="cm-content-body publish-content form excerpt">
+                                    <div class="card-body">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-text fas fa-envelope"></div>
+                                            <input type="text" class="form-control" placeholder="exemple@exemple.com">
+                                        </div>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-text fab fa-whatsapp"></div>
+                                            <input type="text" class="form-control" placeholder="00228 00 00 00 00">
+                                        </div>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-text fas fa-phone "></div>
+                                            <input type="text" class="form-control" placeholder="00228 00 00 00 00">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="filter cm-content-box box-primary">
+                                <div class="content-title SlideToolHeader">
+                                    <div class="cpa">Social media</div>
+                                    <div class="tools">
+                                        <a href="javascript:void(0);" class="expand handle"><i
+                                                class="fal fa-angle-down"></i></a>
+                                    </div>
+                                </div>
+                                <div class="cm-content-body publish-content form excerpt">
+                                    <div class="card-body">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-text fab fa-linkedin"></div>
+                                            <input type="text" class="form-control" placeholder="https//:...">
+                                        </div>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-text fab fa-twitter"></div>
+                                            <input type="text" class="form-control" placeholder="https//:...">
+                                        </div>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-text fab fa-instagram "></div>
+                                            <input type="text" class="form-control" placeholder="https//:...">
+                                        </div>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-text fab fa-facebook-f "></div>
+                                            <input type="text" class="form-control" placeholder="https//:...">
+                                        </div>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-text fab fa-youtube "></div>
+                                            <input type="text" class="form-control" placeholder="https//:...">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                           <center> <a href="javascript:void(0);" class="btn btn-primary mt-5" style="width: 80%;">Publish</a></center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock adminblock %}

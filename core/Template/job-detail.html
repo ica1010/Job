@@ -1,0 +1,236 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+<div class="page-content m-t15">
+
+    <!-- Blog Details -->
+    <section class="content-inner position-relative">
+        <div class="container">
+            <div class="row ">
+                <div class="col-xl-8 col-lg-8 m-b30">
+                    <div class="blog-single pt-20 sidebar dz-card">
+                        <div class="dz-media dz-media-rounded rounded" style="max-height: 500px;">
+                            <img src="{{job.image.url}}" alt="" style="width: 500px;">
+                        </div>
+                        <div class="dz-info m-b30">
+                            <div class="job-detail-content">
+                                <h3 class="dz-title">{{job.title}}<span class="job-duration">/{{job.timeago}}</span>
+                                </h3>
+                                <p class="job-address"><i
+                                        class="fa-solid fa-location-dot text-primary"></i>{{job.locality}}</p>
+                                <div class="income">
+
+                                    {% if job.is_salary_alpha %}
+                                    <div class="jobs-amount">{{job.salary}} <span>/ Month</span></div>
+                                    {% else %}
+                                    <div class="jobs-amount">{{job.salary}}</div>
+                                    {% endif %}
+
+                                    <div class="apllication-area">Application ends:<span class="apllication-date">
+                                            {{job.expire_date}}</span></div>
+                                </div>
+                            </div>
+
+                            <div class="dz-post-text">
+
+                                {% if job.description %}
+                                <h4 class="title">Job Description:</h4>
+                                {{job.description}}
+                                {% endif %}
+
+                                {% if job.requierements %}
+                                <h4 class="title">Requirements:</h4>
+                                {{job.requierements}}
+                                {% endif %}
+
+                                {% if job.responsability %}
+                                <h4 class="title">Responsibilities:</h4>
+                                {{job.responsability}}
+                                {% endif %}
+
+                            </div>
+
+                            {% if job.facebook_link or job.instagram_link or job.twetter_link or job.youtube_link %}
+                            <h4 class="title">Social Profile:</h4>
+                            <div class="dz-share-post">
+                                <div class="dz-social-icon dark">
+                                    <ul>
+                                        {% if job.facebook_link %}
+                                        <li><a target="_blank" class="fab fa-facebook-f"
+                                                href="{{job.facebook_link}}"></a></li>
+                                        {% endif %}
+
+                                        {% if job.instagram_link %}
+                                        <li><a target="_blank" class="fab fa-instagram"
+                                                href="{{job.instagram_link}}"></a></li>
+                                        {% endif %}
+
+                                        {% if job.twetter_link %}
+                                        <li><a target="_blank" class="fab fa-twitter"
+                                                href="{{job.twetter_link}}"></a></li>
+                                        {% endif %}
+
+                                        {% if job.youtube_link %}
+                                        <li><a target="_blank" class="fab fa-youtube"
+                                                href="/{{job.youtube_link}}"></a>
+                                        </li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+
+                            </div>
+                            {% endif %}
+
+                            {% if job.mail or job.phone or job.whatsapp %}
+                            <h4 class="title">Contact:</h4>
+                            <div class="dz-share-post">
+                                <div class="dz-social-icon dark">
+                                    <ul>
+                                        {% if job.mail %}
+                                        <li>
+                                            <a href="mailto:{{job.mail}}" target="_blank" class="fas fa-envelope" ></a>
+                                        </li>
+                                        
+                                        {% endif %}
+
+                                        {% if job.phone %}
+                                        <li><a target="_blank" class="fas fa-phone" href="tel:{{job.phone}}"></a></li>
+                                        {% endif %}
+
+                                        {% if job.whatsapp %}
+                                        <li><a target="_blank" class="fab fa-whatsapp"
+                                                href="https://wa.me/{{job.whatsapp}}"></a></li>
+                                        {% endif %}
+
+                                    </ul>
+                                </div>
+
+                            </div>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                    <h4 class="title">Location:</h4>
+                    <div class="twm-m-map">
+                        <div class="twm-m-map-iframe">
+                            <iframe class="w-100" height="310"
+                                src="https://maps.google.com/maps?q=25.12879927431729,75.82016637907016&hl=es&z=14&amp;output=embed"></iframe>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-xl-4 col-lg-4">
+                    <aside class="side-bar sticky-top right ">
+
+                        <div class="widget-title">
+                            <h4 class="title">Job Information</h4>
+                        </div>
+
+                        <div class="widget widget_categories style-2">
+                            <ul>
+                                <li>
+                                    <div class="info-inner">
+                                        <i class="fas fa-eye"></i>
+                                        <span class="title">Views</span>
+                                        <div class="info-discription">110</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="info-inner">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <span class="title">DATE POSTED</span>
+                                        <div class="info-discription">{{job.publication_date}}</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="info-inner">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <span class="title">LOCATION</span>
+                                        <div class="info-discription">{{job.locality}}</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="info-inner">
+                                        <i class="fas fa-user-tie"></i>
+                                        <span class="title">JOB TITLE</span>
+                                        <div class="info-discription">{{job.title}}</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="info-inner">
+                                        <i class="fas fa-skill"></i>
+                                        <span class="title">CONPETENCE</span>
+                                        <div class="info-discription">
+                                            {% for competence in job.competence.all %}
+                                            {{competence}}
+                                            {% if forloop.last %}
+                                            {% else %}
+                                            ,
+                                            {% endif %}
+
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="info-inner">
+                                        <i class="fas fa-clock"></i>
+                                        <span class="title">EXPERIENCE</span>
+                                        <div class="info-discription">
+                                            {{job.experience}}
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="info-inner">
+                                        <i class="fas fa-suitcase"></i>
+                                        <span class="title">QUALIFICATION</span>
+                                        <div class="info-discription">{{job.qualification}}</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="info-inner">
+                                        <i class="fas fa-venus-mars"></i>
+                                        <span class="title">GENDER</span>
+                                        <div class="info-discription">{{job.genre}}</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="info-inner">
+                                        <i class="fas fa-money-bill-wave"></i>
+                                        <span class="title">OFFERED SALARY</span>
+                                        {% if job.is_salary_alpha %}
+                                        <div class="info-discription">{{job.salary}}/ MONTH</div>
+
+                                        {% else %}
+                                        <div class="info-discription">{{job.salary}}</div>
+
+                                        {% endif %}
+
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+
+                        <div class="widget widget_tag_cloud">
+                            <div class="widget-title">
+                                <h4 class="title">Tags</h4>
+                            </div>
+                            <div class="tagcloud">
+
+                                {% for tag in job.tag.all %}
+                                <a href="javascript:void(0);">{{tag}}</a>
+                                {% endfor %}
+
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Blog Details -->
+</div>
+{% endblock body %}
