@@ -10,15 +10,22 @@
                     <div class="card-body">
                    
                         <h4 class="text-center mb-4">Sign in your account</h4>
+                        {% if messages %}
+                            
+                        {% for message in messages  %}
+                            <p>{{message}}</p>
+                        {% endfor %}
+                            
+                    {% endif %}
                         <form action="{% url 'login' %}" method="post">
                             {% csrf_token %}
                             <div class="form-group mb-4">
                                 <label class="form-label" for="username">Username</label>
-                                <input type="text" class="form-control" placeholder="Enter username" id="username">
+                                <input type="text" class="form-control" placeholder="Enter username" name="username" id="username">
                             </div>
                             <div class="mb-sm-4 mb-3 position-relative">
                                 <label class="form-label" for="dlab-password">Password</label>
-                                <input type="password" id="dlab-password" class="form-control" value="123456">
+                                <input type="password" name="password" id="dlab-password" class="form-control" value="">
                                 <span class="show-pass eye">
                                     <i class="fa fa-eye-slash"></i>
                                     <i class="fa fa-eye"></i>

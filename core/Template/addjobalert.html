@@ -1,4 +1,5 @@
 {% extends 'admin-base.html' %} {% load static %} {% block adminblock %}
+<link href="{% static 'vendor/jquery-smartwizard/dist/css/smart_wizard.min.css' %}" rel="stylesheet">
 <div class="content-body">
     <div class="container-fluid">
         <div class="page-titles">
@@ -10,20 +11,246 @@
             </ol>
         </div>
         <!-- Row -->
+        <!-- <div class="row">
+            <div class="col-xl-12 col-xxl-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Form step</h4>
+                    </div>
+                    <div class="card-body">
+                        <div id="smartwizard" class="form-wizard order-create">
+                            <ul class="nav nav-wizard">
+                                <li><a class="nav-link" href="#wizard_Service"> 
+                                    <span>1</span> 
+                                </a></li>
+                                <li><a class="nav-link" href="#wizard_Time">
+                                    <span>2</span>
+                                </a></li>
+                                <li><a class="nav-link" href="#wizard_Details">
+                                    <span>3</span>
+                                </a></li>
+                                <li><a class="nav-link" href="#wizard_Payment">
+                                    <span>4</span>
+                                </a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div id="wizard_Service" class="tab-pane" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-lg-6 mb-2">
+                                            <div class="mb-3">
+                                                <label class="text-label form-label">First Name*</label>
+                                                <input type="text" name="firstName" class="form-control" placeholder="Parsley" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 mb-2">
+                                            <div class="mb-3">
+                                                <label class="text-label form-label">Last Name*</label>
+                                                <input type="text" name="lastName" class="form-control" placeholder="Montana" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 mb-2">
+                                            <div class="mb-3">
+                                                <label class="text-label form-label">Email Address*</label>
+                                                <input type="email" class="form-control" id="inputGroupPrepend2" aria-describedby="inputGroupPrepend2" placeholder="example@example.com.com" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 mb-2">
+                                            <div class="mb-3">
+                                                <label class="text-label form-label">Phone Number*</label>
+                                                <input type="number" name="phoneNumber" class="form-control" placeholder="(+1)408-657-9007" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 mb-3">
+                                            <div class="mb-3">
+                                                <label class="text-label form-label">Where are you from*</label>
+                                                <input type="text" name="place" class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="wizard_Time" class="tab-pane" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-lg-6 mb-2">
+                                            <div class="mb-3">
+                                                <label class="text-label form-label">Company Name*</label>
+                                                <input type="text" name="firstName" class="form-control" placeholder="Cellophane Square" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 mb-2">
+                                            <div class="mb-3">
+                                                <label class="text-label form-label">Company Email Address*</label>
+                                                <input type="email" class="form-control" id="emial1" placeholder="example@example.com.com" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 mb-2">
+                                            <div class="mb-3">
+                                                <label class="text-label form-label">Company Phone Number*</label>
+                                                <input type="text" name="phoneNumber" class="form-control" placeholder="(+1)408-657-9007" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 mb-2">
+                                            <div class="mb-3">
+                                                <label class="text-label form-label">Your position in Company*</label>
+                                                <input type="text" name="place" class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="wizard_Details" class="tab-pane" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-sm-4 mb-2">
+                                            <label class="form-label required">Monday</label>
+                                        </div>
+                                        <div class="col-6 col-sm-4 mb-2">
+                                            <div class="mb-3">
+                                                <input class="form-control" value="9.00" type="number" name="input1" id="input1">
+                                            </div>
+                                        </div>
+                                        <div class="col-6 col-sm-4 mb-2">
+                                            <div class="mb-3">
+                                                <input class="form-control" value="6.00" type="number" name="input2" id="input2">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4 mb-2">
+                                            <label class="form-label required">Tuesday </label>
+                                        </div>
+                                        <div class="col-6 col-sm-4 mb-2">
+                                            <div class="mb-3">
+                                                <input class="form-control" value="9.00" type="number" name="input3" id="input3">
+                                            </div>
+                                        </div>
+                                        <div class="col-6 col-sm-4 mb-2">
+                                            <div class="mb-3">
+                                                <input class="form-control" value="6.00" type="number" name="input4" id="input4">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4 mb-2">
+                                            <label class="form-label required">Wednesday</label>
+                                        </div>
+                                        <div class="col-6 col-sm-4 mb-2">
+                                            <div class="mb-3">
+                                                <input class="form-control" value="9.00" type="number" name="input5" id="input5">
+                                            </div>
+                                        </div>
+                                        <div class="col-6 col-sm-4 mb-2">
+                                            <div class="mb-3">
+                                                <input class="form-control" value="6.00" type="number" name="input6" id="input6">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4 mb-2">
+                                            <label class="form-label required">Thrusday</label>
+                                        </div>
+                                        <div class="col-6 col-sm-4 mb-2">
+                                            <div class="mb-3">
+                                                <input class="form-control" value="9.00" type="number" name="input7" id="input7">
+                                            </div>
+                                        </div>
+                                        <div class="col-6 col-sm-4 mb-2">
+                                            <div class="mb-3">
+                                                <input class="form-control" value="6.00" type="number" name="input8" id="input8">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4 mb-2">
+                                            <label class="form-label required">Friday</label>
+                                        </div>
+                                        <div class="col-6 col-sm-4 mb-2">
+                                            <div class="mb-3">
+                                                <input class="form-control" value="9.00" type="number" name="input9" id="input9">
+                                            </div>
+                                        </div>
+                                        <div class="col-6 col-sm-4 mb-2">
+                                            <div class="mb-3">
+                                                <input class="form-control" value="6.00" type="number" name="input10" id="input10">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="wizard_Payment" class="tab-pane" role="tabpanel">
+                                    <div class="row emial-setup">
+                                        <div class="col-lg-3 col-sm-6 col-6">
+                                            <div class="mb-3">
+                                                <label for="mailclient11" class="mailclinet mailclinet-gmail">
+                                                    <input type="radio" name="emailclient" id="mailclient11">
+                                                    <span class="mail-icon">
+                                                        <i class="mdi mdi-google-plus" aria-hidden="true"></i>
+                                                    </span>
+                                                    <span class="mail-text">I'm using Gmail</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-sm-6 col-6">
+                                            <div class="mb-3">
+                                                <label for="mailclient12" class="mailclinet mailclinet-office">
+                                                    <input type="radio" name="emailclient" id="mailclient12">
+                                                    <span class="mail-icon">
+                                                        <i class="mdi mdi-office" aria-hidden="true"></i>
+                                                    </span>
+                                                    <span class="mail-text">I'm using Office</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-sm-6 col-6">
+                                            <div class="mb-3">
+                                                <label for="mailclient13" class="mailclinet mailclinet-drive">
+                                                    <input type="radio" name="emailclient" id="mailclient13">
+                                                    <span class="mail-icon">
+                                                        <i class="mdi mdi-google-drive" aria-hidden="true"></i>
+                                                    </span>
+                                                    <span class="mail-text">I'm using Drive</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-sm-6 col-6">
+                                            <div class="mb-3">
+                                                <label for="mailclient14" class="mailclinet mailclinet-another">
+                                                    <input type="radio" name="emailclient" id="mailclient14">
+                                                    <span class="mail-icon">
+                                                        <i class="far fa-question-circle"></i>
+                                                    </span>
+                                                    <span class="mail-text">Another Service</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="skip-email text-center">
+                                                <p>Or if want skip this step entirely and setup it later</p>
+                                                <a href="javascript:void(0)">Skip step</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
         <div class="row">
             <div class="col-xl-12">
-                <div class="row">
+                <form class="row" action="{% url 'addjob' %}" method="post">
+                    {% csrf_token %}
                     <div class="col-xl-8">
                         <div class="card h-auto">
                             <div class="card-body row">
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Job title</label>
-                                    <input type="text" class="form-control" placeholder="Job title" />
+                                    <input type="text" class="form-control" name="title" placeholder="Job title" />
                                 </div>
 
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Category</label>
-                                    <select class="disabling-options" style="width:100%;">
+                                    <select class="disabling-options" style="width:100%;" name="category">
                                         {% for cat in cat %}
                                         <option value="{{cat.title}}">{{cat.title}}</option>
                                         {% endfor %}
@@ -34,65 +261,65 @@
                         <div class="card h-auto">
                             <div class="card-body">
                                 <label class="form-label">Description</label>
-                                <div id="ckeditor"></div>
+                                <textarea id="ckeditor" name="description" ></textarea>
                              
                                 <label class="form-label mt-5"  >Requiements</label>
                                 <textarea class="form-control" id="ckeditor1" rows="5"
-                                    placeholder="" required="" id="ckeditor" spellcheck="false"></textarea>
+                                    placeholder="" required="" id="ckeditor" spellcheck="false"  name="requiements" ></textarea>
                                 <label class="form-label mt-5">Responsability</label>
                                 <textarea class="form-control" id="ckeditor2" rows="5"
-                                    placeholder="" required="" spellcheck="false"></textarea>
+                                    placeholder="" required="" spellcheck="false" name="responsability"></textarea>
                             </div>
                         </div>
                         <div class="card h-auto">
                             <div class="card-body row">
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Experience years</label>
-                                    <input type="text" class="form-control" placeholder="5 years" />
+                                    <input type="text" class="form-control" placeholder="5 years" name="experience" />
                                 </div>
 
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Salary</label>
-                                    <select id="dynamic-option-creation" style="width:100%;">
-                                        <option value="AL">A en discuter</option>
+                                    <select id="dynamic-option-creation" style="width:100%;" name="salary">
+                                        <option value="A en discuter" selected >A en discuter</option>
                           
                                     </select>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Type of contrat</label>
-                                    <select class="default-select  form-control wide" >
-                                        <option>Full time</option>
-                                        <option>Partial time</option>
-                                        <option>Other</option>
+                                    <select class="default-select  form-control wide" name="type">
+                                        <option selected value="Full time">Full time</option>
+                                        <option value="Partial time">Partial time</option>
+                                        <option value="Other">Other</option>
                                     
                                     </select>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Conpetence</label>
-                                    <select id="multi-value-select-2" style="width:100%;" multiple="multiple" >
+                                    <select id="multi-value-select-2" style="width:100%;" multiple="multiple" name="conpetence" >
                                     </select>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Tags</label>
-                                    <select id="multi-value-select" style="width:100%;" multiple="multiple" >
+                                    <select id="multi-value-select" style="width:100%;" multiple="multiple" name="tags" >
                                     </select>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Diplomes</label>
-                                    <select id="dynamic-option-creation-2" style="width:100%;">
-                                        <option value="AL">BEPC</option>
-                                        <option value="AL">BAC</option>
-                                        <option value="AL">License 1</option>
-                                        <option value="AL">License 2</option>
-                                        <option value="AL">License 3</option>
-                                        <option value="AL">Master1</option>
-                                        <option value="AL">Master2</option>
-                                        <option value="AL">Master3</option>
-                                        <option value="AL">Doctorat</option>
+                                    <select id="dynamic-option-creation-2" style="width:100%;" name="diplomes">
+                                        <option value="BEPC" selected>BEPC</option>
+                                        <option value="BAC">BAC</option>
+                                        <option value="License 1">License 1</option>
+                                        <option value="License 2">License 2</option>
+                                        <option value="License 3">License 3</option>
+                                        <option value="Master1">Master1</option>
+                                        <option value="Master1">Master2</option>
+                                        <option value="Master2">Master3</option>
+                                        <option value="Doctorat">Doctorat</option>
                           
                                     </select>
                                 </div>
@@ -100,22 +327,22 @@
                                 <div class="mb-3 col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label">Genre</label>
-                                        <select class="default-select  form-control wide" >
-                                            <option>F/H</option>
-                                            <option>H</option>
-                                            <option>F</option>
+                                        <select class="default-select  form-control wide"name="genre" >
+                                            <option selected value="F/H">F/H</option>
+                                            <option value="H">H</option>
+                                            <option value="F">F</option>
                                         
                                         </select>
                                     </div>
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Locality</label>
-                                    <input type="text" class="form-control" placeholder="Title" />
+                                    <input type="text" class="form-control" placeholder="Title" name="locality" />
                                 </div>
 
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Expiration date</label>
-                                    <input type="text" id="date-format" class="form-control" placeholder="Saturday 24 June 2017 - 21:44">
+                                    <input type="text" id="date-format" class="form-control" placeholder="Saturday 24 June 2017 - 21:44" name="expiration">
                                 </div>
                             </div>
                         </div>
@@ -136,12 +363,12 @@
                                             <div class="position-relative">
                                                 <div class="avatar-preview">
                                                     <div id="imagePreview" style="
-                              background-image: url(images/no-img-avatar.png);
+                              background-image: url({% static "images/no-img-avatar.png" %}); 
                             "></div>
-                                                </div>
+                                                </div >
                                                 <div class="change-btn d-flex align-items-center flex-wrap">
                                                     <input type="file" class="form-control d-none" id="imageUpload"
-                                                        accept=".png, .jpg, .jpeg" />
+                                                        accept=".png, .jpg, .jpeg"  value="{% static "images/no-img-avatar.png" %}" name="image" />
                                                     <label for="imageUpload"
                                                         class="btn btn-sm btn-primary light ms-0">Select Image</label>
                                                 </div>
@@ -163,15 +390,15 @@
                                     <div class="card-body">
                                         <div class="input-group mb-3">
                                             <div class="input-group-text fas fa-envelope"></div>
-                                            <input type="text" class="form-control" placeholder="exemple@exemple.com">
+                                            <input type="text" class="form-control" name="email" placeholder="exemple@exemple.com">
                                         </div>
                                         <div class="input-group mb-3">
                                             <div class="input-group-text fab fa-whatsapp"></div>
-                                            <input type="text" class="form-control" placeholder="00228 00 00 00 00">
+                                            <input type="text" class="form-control" name="whatsapp" placeholder="00228 00 00 00 00">
                                         </div>
                                         <div class="input-group mb-3">
                                             <div class="input-group-text fas fa-phone "></div>
-                                            <input type="text" class="form-control" placeholder="00228 00 00 00 00">
+                                            <input type="text" class="form-control"  name="phone"  placeholder="00228 00 00 00 00">
                                         </div>
                                     </div>
                                 </div>
@@ -189,35 +416,40 @@
                                     <div class="card-body">
                                         <div class="input-group mb-3">
                                             <div class="input-group-text fab fa-linkedin"></div>
-                                            <input type="text" class="form-control" placeholder="https//:...">
+                                            <input type="text" class="form-control" placeholder="https//:..." name="linkedin">
                                         </div>
                                         <div class="input-group mb-3">
                                             <div class="input-group-text fab fa-twitter"></div>
-                                            <input type="text" class="form-control" placeholder="https//:...">
+                                            <input type="text" class="form-control" placeholder="https//:..." name="twitter">
                                         </div>
                                         <div class="input-group mb-3">
                                             <div class="input-group-text fab fa-instagram "></div>
-                                            <input type="text" class="form-control" placeholder="https//:...">
+                                            <input type="text" class="form-control" placeholder="https//:..." name="instagram">
                                         </div>
                                         <div class="input-group mb-3">
                                             <div class="input-group-text fab fa-facebook-f "></div>
-                                            <input type="text" class="form-control" placeholder="https//:...">
+                                            <input type="text" class="form-control" placeholder="https//:..."  name="facebook">
                                         </div>
                                         <div class="input-group mb-3">
                                             <div class="input-group-text fab fa-youtube "></div>
-                                            <input type="text" class="form-control" placeholder="https//:...">
+                                            <input type="text" class="form-control" placeholder="https//:..." name="youtube">
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                           <center> <a href="javascript:void(0);" class="btn btn-primary mt-5" style="width: 80%;">Publish</a></center>
+                           <button type="submit" class="btn btn-primary mt-5" style="width: 80%;" onclick="submit()" >Publish</button>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
-
+<!-- <script>
+    $(document).ready(function(){
+        // SmartWizard initialize
+        $('#smartwizard').smartWizard(); 
+    });
+</script> -->
 {% endblock adminblock %}

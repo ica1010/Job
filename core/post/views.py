@@ -1,9 +1,12 @@
+from email.utils import parsedate
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from user.models import ProfileEmployeur
 from post.models import Category, Job
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
+from django.contrib import messages
+import taggit.models
 # from visits.models import Visits
 # Create your views here.
 def homePage(request):
@@ -81,8 +84,70 @@ def adminJobList(request):
 
 @login_required(login_url='/auth/sign-in/')
 def addjob(request):
+    # url = request.META.get('HTTP_REFERER')
     cat = Category.objects.all()
+    if request.method == 'POST' :
+        job_title = request.POST['title']
+        category = request.POST['category']
+        description = request.POST['description']
+        requiements = request.POST['requiements']
+        responsability = request.POST['responsability']
+        experience = request.POST['experience']
+        salary = request.POST['salary']
+        type = request.POST['type']
+        conpetence = request.POST.getlist('conpetence')
+        tags = request.POST.getlist('tags')
+        diplomes = request.POST['diplomes']
+        genre = request.POST['genre']
+        locality = request.POST['locality']
+        expiration = request.POST['expiration']
+        image = request.POST['image']
+        email = request.POST['email']
+        whatsapp = request.POST['whatsapp']
+        phone = request.POST['phone']
+        linkedin = request.POST['linkedin']
+        twitter = request.POST['twitter']
+        instagram = request.POST['instagram']
+        facebook = request.POST['facebook']
+        youtube = request.POST['youtube']
+        
 
+        expiration = parsedate(expiration)
+        category_inst = Category.objects.get(title = category)
+                                       
+
+        new_job = Job.objects.create(
+            author = ProfileEmployeur.objects.get(user=request.user),
+            title = job_title,
+            image = image,
+            category = category_inst,
+            description = description,
+            requierements = requiements,
+            responsability = responsability,
+            experience =experience,
+            salary = salary,
+            type = type,
+            competence = conpetence,
+            tag = tags,
+            qualification = diplomes,
+            locality = locality,
+            genre = genre,
+            expire_date =expiration,
+            facebook_link = facebook,
+            instagram_link = instagram,
+            twetter_link = twitter,
+            youtube_link = youtube,
+            mail =email,
+            phone =phone,
+            whatsapp =whatsapp
+        )
+    
+    for c in conpetence : 
+        print(c)
+
+    for t in tags : 
+            print(t)   
+             
     context = {
         'cat':cat,
     }

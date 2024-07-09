@@ -25,6 +25,7 @@ def register_view(request):
             try:
                 user = User.objects.create_user(username=email, email=email, password=password)
                 messages.success(request, 'Account created successfully!')
+                ProfileEmployeur.objects.create(user=user)
                 login(request, user)
                 return redirect('home')
             except Exception as e :
@@ -37,10 +38,21 @@ def register_view(request):
 
 
 def login_view(request):
+    # url = request.META.get('HTTP_REFERER')
+
     if request.user.is_authenticated:
         messages.warning(request, 'You are already logged in.')
         return redirect('homePage')
     
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+           
+        user = authenticate(request, username=username, password=password)
+        messages.success(request, 'Login successfully!')
+        login(request, user)
+        return redirect('home')
+
     return render(request, 'auth/login.html')
 
 

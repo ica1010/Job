@@ -1,5 +1,6 @@
 
 {% load static %}
+    <!-- Form step -->
 
 <link href="{% static 'vendor/bootstrap-select/dist/css/bootstrap-select.min.css' %}" rel="stylesheet">
 <link href="{% static 'css/style.css' %}" rel="stylesheet">
@@ -23,7 +24,7 @@
                         <form action="{% url 'register' %}" method="post">
                             {% csrf_token %}
                             <div class="form-group mb-4">
-                                <label class="form-label" for="email">Email</label>
+                                <label class="form-label" for="email">Email/Username</label>
                                 <input type="email" class="form-control" placeholder="hello@example.com" id="email" name="email">
                             </div>
                             <div class="mb-sm-4 mb-3 position-relative">

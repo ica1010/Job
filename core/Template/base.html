@@ -73,6 +73,14 @@
 							<a href="/" class="logo-dark">
 								<h1 style="font-size: x-larger">Job</h1>
 							</a>
+							{% if messages %}
+                            
+							{% for message in messages  %}
+								<p>{{message}}</p>
+							{% endfor %}
+						
+							{% endif %}
+								
 						</div>
 
 						<!-- Nav Toggle Button -->

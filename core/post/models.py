@@ -46,7 +46,7 @@ class Job(models.Model):
     qualification = models.CharField(max_length=150, default='aucun diplome requis')
     locality = models.CharField(max_length=50)
     genre =  models.CharField(max_length=50, default='')
-    expire_date = models.DateTimeField(auto_now=False, auto_now_add=False)
+    expire_date = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True, null=True)
     publication_date = models.DateTimeField(auto_now=False, auto_now_add=True)
 
     facebook_link =  models.URLField(max_length=250, blank=True, null=True, default='')
