@@ -1,4 +1,4 @@
-from email.utils import parsedate
+from datetime import datetime
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from user.models import ProfileEmployeur
@@ -6,7 +6,7 @@ from post.models import Category, Job
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.contrib import messages
-import taggit.models
+from taggit.models import Tag
 # from visits.models import Visits
 # Create your views here.
 def homePage(request):
@@ -84,6 +84,7 @@ def adminJobList(request):
 
 @login_required(login_url='/auth/sign-in/')
 def addjob(request):
+
     # url = request.META.get('HTTP_REFERER')
     cat = Category.objects.all()
     if request.method == 'POST' :
@@ -96,7 +97,7 @@ def addjob(request):
         salary = request.POST['salary']
         type = request.POST['type']
         conpetence = request.POST.getlist('conpetence')
-        tags = request.POST.getlist('tags')
+        tags_l = request.POST.getlist('tags')
         diplomes = request.POST['diplomes']
         genre = request.POST['genre']
         locality = request.POST['locality']
@@ -112,10 +113,13 @@ def addjob(request):
         youtube = request.POST['youtube']
         
 
-        expiration = parsedate(expiration)
-        category_inst = Category.objects.get(title = category)
-                                       
+        # Conversion en objet datetime
+        date_obj = datetime.strptime(expiration, "%A %d %B %Y - %H:%M")
 
+        # Conversion en format compatible Django
+        expiration = date_obj.strftime("%Y-%m-%d %H:%M:%S")
+        category_inst = Category.objects.get(title = category)
+                    
         new_job = Job.objects.create(
             author = ProfileEmployeur.objects.get(user=request.user),
             title = job_title,
@@ -127,8 +131,6 @@ def addjob(request):
             experience =experience,
             salary = salary,
             type = type,
-            competence = conpetence,
-            tag = tags,
             qualification = diplomes,
             locality = locality,
             genre = genre,
@@ -142,13 +144,17 @@ def addjob(request):
             whatsapp =whatsapp
         )
     
-    for c in conpetence : 
-        print(c)
+        if conpetence:
+            for c in conpetence:
+               new_job.competence.add(c)
 
-    for t in tags : 
-            print(t)   
+        # Ajouter des tags
+        if tags_l:
+            for tag in tags_l:
+               new_job.tag.add(tag)
              
     context = {
         'cat':cat,
     }
     return render(request, 'addjobalert.html', context)
+
