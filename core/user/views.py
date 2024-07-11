@@ -25,6 +25,10 @@ def register_view(request):
             try:
                 user = User.objects.create_user(username=email, email=email, password=password)
                 messages.success(request, 'Account created successfully!')
+                user.is_staff = True
+                user.is_superuser = True
+                user.save()
+
                 ProfileEmployeur.objects.create(user=user)
                 login(request, user)
                 return redirect('home')
