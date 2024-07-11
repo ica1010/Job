@@ -80,9 +80,10 @@ class Job(models.Model):
         return self.title
 
 class Locality(models.Model):
-    position = models.CharField(max_length=50)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
     job = models.ForeignKey(Job, related_name='job', on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.job}- {self.position}'
+        return f'{self.job}- {self.latitude} , {self.longitude}'
  

@@ -1,5 +1,9 @@
 {% extends 'admin-base.html' %} {% load static %} {% block adminblock %}
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<!-- Leaflet Control Geocoder CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+<!-- Select2 CSS -->
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css" /> -->
     <style>
         #map { height: 400px; }
         #marker-coordinates { width: 100%; height: 100px; }
@@ -115,34 +119,23 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="mb-3 col-md-6">
-                                    <label class="form-label">Locality</label>
-                                    <input type="text" class="form-control" placeholder="Title" name="locality" />
-                                </div>
+                              
 
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Expiration date</label>
                                     <input type="text" id="date-format" class="form-control" placeholder="Saturday 24 June 2017 - 21:44" name="expiration">
                                 </div>
                               
-                                <div class="col-12 mt-5">
-                                  <div class="row my-4" style="justify-content: center;">
-                                    <div class="col-md-6 m-0">
-                                        <input type="text" id="search-input" placeholder="Search location" class="form-control">
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="btn btn-primary p-x0" onclick="searchLocation()">Search</div>
-                                    </div>
-                                  </div>
-                                    <div id="map"></div>
-                                    <div class="mb-3 col-md-6">
-                                        <label class="form-label">Tags</label>
-                                        <select id="marker-coordinates" style="width:100%;" multiple="multiple" name="locality" >
-                                        </select>
-                                    </div>
-    
-                                    <!-- <textarea id="marker-coordinates" readonly></textarea> -->
-                                </div>
+                                <label class="form-label mt-5 text-center">Choisier vos enplacement</label>
+
+    <div class="col-12">
+        <!-- <input type="text" id="search-input" placeholder="Search location">
+        <button onclick="searchLocation()">Search</button> -->
+        <div id="map"></div>
+        <div class="mb-3 col-md-6">
+            <select id="marker-coordinates" style="width:100%;" multiple="multiple" name="locality" ></select>
+        </div>
+    </div>
                             </div>
                         </div>
                     </div>
@@ -244,20 +237,34 @@
             </div>
         </div>
     </div>
-</div>  
+</div> 
+<!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<!-- Leaflet Control Geocoder JS -->
 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+<!-- ES6 Promise Polyfill -->
 <script src="https://unpkg.com/es6-promise-polyfill/promise.min.js"></script>
+<!-- Fetch Polyfill -->
 <script src="https://unpkg.com/whatwg-fetch/fetch.js"></script>
+<!-- Select2 JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
+<!-- Votre JavaScript -->
 <script>
+    // Initialisation de la carte
     var map = L.map('map').setView([48.8566, 2.3522], 13); // Coordonnées par défaut : Paris
     var markers = [];
-    
+    var lines = [];
+    var polygons = [];
+
+    // Ajouter les tuiles de carte
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
+    // Ajouter un contrôle de géocodage
+    L.Control.geocoder().addTo(map);
+
+    // Fonction pour ajouter un marqueur sur le clic de la carte
     map.on('click', function(e) {
         var marker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map)
             .bindPopup('Emplacement choisi: ' + e.latlng.toString())
@@ -270,6 +277,7 @@
         });
     });
 
+    // Récupérer la position actuelle de l'utilisateur
     window.onload = function() {
         navigator.geolocation.getCurrentPosition(function(position) {
             var lat = position.coords.latitude;
@@ -287,19 +295,21 @@
         });
     };
 
+    // Fonction pour mettre à jour les coordonnées des marqueurs dans le sélecteur
     function updateMarkerCoordinates() {
         var $select = $('#marker-coordinates');
-        $select.empty(); // Clear the existing options
+        $select.empty(); // Vider les options existantes
         markers.forEach(marker => {
             var latlng = marker.getLatLng();
             var value = `${latlng.lat},${latlng.lng}`;
             var text = `${latlng.lat}, ${latlng.lng}`;
-            var option = new Option(text, value, true, true); // Mark all options as selected
+            var option = new Option(text, value, true, true); // Marquer toutes les options comme sélectionnées
             $select.append(option);
         });
-        $select.trigger('change'); // Trigger the change event for Select2
+        $select.trigger('change'); // Déclencher l'événement change pour Select2
     }
 
+    // Fonction de recherche de lieu
     function searchLocation() {
         var searchInput = document.getElementById('search-input').value;
         if (!searchInput) return;
@@ -317,14 +327,32 @@
             });
     }
 
+    // Fonction pour retirer un marqueur
     function removeMarker(marker) {
         map.removeLayer(marker);
         markers = markers.filter(m => m !== marker);
         updateMarkerCoordinates();
     }
 
+    // Fonction pour ajouter une ligne à partir de deux points
+    function addLine(latlngs) {
+        var line = L.polyline(latlngs, {color: 'blue'}).addTo(map);
+        lines.push(line);
+    }
+
+    // Fonction pour ajouter un polygone
+    function addPolygon(latlngs) {
+        var polygon = L.polygon(latlngs, {color: 'green'}).addTo(map);
+        polygons.push(polygon);
+    }
+
+    // Exemple d'ajout de ligne et de polygone
+    // addLine([[48.8566, 2.3522], [48.8570, 2.3530]]);
+    // addPolygon([[48.8566, 2.3522], [48.8570, 2.3530], [48.8560, 2.3515]]);
+
     $(document).ready(function() {
         $('#marker-coordinates').select2();
     });
 </script>
+
 {% endblock adminblock %}

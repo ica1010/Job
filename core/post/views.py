@@ -2,7 +2,7 @@ from datetime import datetime
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from user.models import ProfileEmployeur
-from post.models import Category, Job
+from post.models import Category, Job, Locality
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.contrib import messages
@@ -119,7 +119,8 @@ def addjob(request):
         # Conversion en format compatible Django
         expiration = date_obj.strftime("%Y-%m-%d %H:%M:%S")
         category_inst = Category.objects.get(title = category)
-                    
+        
+
         new_job = Job.objects.create(
             author = ProfileEmployeur.objects.get(user=request.user),
             title = job_title,
@@ -143,6 +144,14 @@ def addjob(request):
             whatsapp =whatsapp
         )
     
+        for l in locality :
+            long, lat = [coord.strip() for coord in l.split(',')]
+            Locality.objects.create(
+                job = new_job,
+                latitude = lat,
+                longitude = long
+            )
+
         if conpetence:
             for c in conpetence:
                new_job.competence.add(c)
