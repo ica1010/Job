@@ -26,7 +26,6 @@
                                 <th>Type</th>
                                 <th>Posted Date</th>
                                 <th>Last Date To Apply</th>
-                                <th>Close Date</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -35,13 +34,20 @@
                             
                             {% for job in job %}
                             <tr>
-                                <td> {{forloop.counter}} </td>
-                                <td>Network Engineer</td>
-                                <td class="wspace-no">Full-Time</td>
-                                <td>12-01-2023</td>
-                                <td>24-01-2023</td>
-                                <td>25-01-2023</td>
-                                <td><span class="badge badge-success badge-lg light">Active</span></td>
+                                <td> {{forloop.counter}}</td>
+                                <td>{{job.title}}</td>
+                                <td class="wspace-no">{{job.type}}</td>
+                                <td>{{job.publication_date}}</td>
+                                <td>{{job.expire_date}}</td>
+                                <td>
+                                    
+                                    {% if job.active %}
+                                    <span class="badge badge-success badge-lg light">Active</span>
+                                    {% else %}
+                                    <span class="badge badge-dark badge-lg light">Inactive</span>
+                                    {% endif %}
+                                        
+                                </td>
                                 <td>
                                     <div class="action-buttons d-flex justify-content-end">
                                         <a href="javascript:void(0);" class="btn btn-success light mr-2">
@@ -73,7 +79,9 @@
                           
                             
                         </tbody>
+                        
                     </table>
+                    
                 </div>
             </div>
         </div>

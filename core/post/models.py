@@ -1,3 +1,4 @@
+from typing import Any
 from django.db import models
 from shortuuid.django_fields import ShortUUIDField
 import timeago, datetime
@@ -59,6 +60,10 @@ class Job(models.Model):
     whatsapp = models.CharField(max_length=150, default='' , blank=True, null=True)
 
 
+    active = models.BooleanField(default=True)
+
+   
+
     def timeago(self):
         if timezone.is_naive(self.publication_date):
             publication_date = timezone.make_aware(self.publication_date, timezone.get_current_timezone())
@@ -74,3 +79,10 @@ class Job(models.Model):
     def __str__(self):
         return self.title
 
+class Locality(models.Model):
+    position = models.CharField(max_length=50)
+    job = models.ForeignKey(Job, related_name='job', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.job}- {self.position}'
+ 

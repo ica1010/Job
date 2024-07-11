@@ -100,7 +100,7 @@ def addjob(request):
         tags_l = request.POST.getlist('tags')
         diplomes = request.POST['diplomes']
         genre = request.POST['genre']
-        locality = request.POST['locality']
+        locality = request.POST.getlist('locality')
         expiration = request.POST['expiration']
         image = request.POST['image']
         email = request.POST['email']
@@ -132,7 +132,6 @@ def addjob(request):
             salary = salary,
             type = type,
             qualification = diplomes,
-            locality = locality,
             genre = genre,
             expire_date =expiration,
             facebook_link = facebook,
