@@ -188,6 +188,10 @@
     tags: true,
   });
 
+  $("#marker-coordinates").select2({
+    tags: true,
+  });
+
   // single-select-placeholder
   $(".single-select-placeholder").select2({
     placeholder: "Select a state",
