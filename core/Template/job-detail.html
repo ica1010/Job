@@ -36,17 +36,17 @@
 
                                 {% if job.description %}
                                 <h4 class="title">Job Description:</h4>
-                                {{job.description}}
+                                {{job.description| safe }}
                                 {% endif %}
 
                                 {% if job.requierements %}
                                 <h4 class="title">Requirements:</h4>
-                                {{job.requierements}}
+                                {{job.requierements| safe }}
                                 {% endif %}
 
                                 {% if job.responsability %}
                                 <h4 class="title">Responsibilities:</h4>
-                                {{job.responsability}}
+                                {{job.responsability| safe }}
                                 {% endif %}
 
                             </div>
