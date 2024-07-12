@@ -75,7 +75,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': dj_database_url.config(
         # Remplacez les valeurs USER, PASSWORD, HOST et NAME par vos informations de connexion.
-        default='postgres://job_a49b_user:xtJgMVaosRkC5QqkdbbwdZ5dmivr5BX3@dpg-cq84822ju9rs73c2dok0-a:5432/job_a49b',
+        default='postgres://job_a49b_user:PASSWORD@https://pghero-dpg-cq84822ju9rs73c2dok0-a.onrender.com/:5432/NAME',
         conn_max_age=600
     )
 }
