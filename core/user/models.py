@@ -6,7 +6,7 @@ from django.contrib.auth.models import Group, Permission , User
 
         
 class ProfileEmployeur(models.Model):
-    eid = ShortUUIDField(unique=True, max_length=20, primary_key=True  , editable=False)
+    eid = ShortUUIDField(unique=True, max_length=255, length= 20 , primary_key=True , editable=False)
     user = models.OneToOneField(User, on_delete=models.CASCADE, default='')
     active = models.BooleanField(default=True)
 

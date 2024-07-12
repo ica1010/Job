@@ -10,7 +10,7 @@ from taggit.models import TaggedItemBase
 # Create your models here.
 now = datetime.datetime.now() + datetime.timedelta(seconds = 60 * 3.4)
 class Category(models.Model):
-    cid = ShortUUIDField(unique=True, length=6, max_length=20 , alphabet='1234567890' , editable=False,  prefix='cat-')
+    cid = ShortUUIDField(unique=True, length=6,max_length=255, alphabet='1234567890' , editable=False,  prefix='cat-')
     title = models.CharField(max_length=50)
     image = models.ImageField(max_length=250, default='default.jpg')
 
@@ -31,11 +31,11 @@ class ConpetenceTaggedItem(TaggedItemBase):
     content_object = models.ForeignKey('Job', on_delete=models.CASCADE)
 
 class Job(models.Model):
-    jid = ShortUUIDField(unique=True, length=6, max_length=20 , alphabet='1234567890' , editable=False,  prefix='job-')
+    jid = ShortUUIDField(unique=True, length=6 ,max_length=255, alphabet='1234567890' , editable=False,  prefix='job-')
     title = models.CharField(max_length=50)
     image = models.ImageField(max_length=250, default='default.jpg')
     category = models.ForeignKey(Category,on_delete=models.CASCADE, default='', related_name='category')
-    author = models.ForeignKey(ProfileEmployeur,on_delete=models.CASCADE, default='', related_name='author')
+    author = models.ForeignKey(ProfileEmployeur,on_delete=models.CASCADE,related_name='author')
     description = models.TextField()
     requierements = models.TextField(default='')
     responsability = models.TextField(default='')

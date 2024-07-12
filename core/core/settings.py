@@ -75,7 +75,8 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Base de données
 
 DATABASES = {
-    'default': dj_database_url.parse('postgresql://job_a49b_user:xtJgMVaosRkC5QqkdbbwdZ5dmivr5BX3@dpg-cq84822ju9rs73c2dok0-a.ohio-postgres.render.com/job_a49b')
+    
+    'default': dj_database_url.parse('postgresql://post_z1ka_user:Ki9yKYZtVmcqhaJXedERLoC1zqYZBNne@dpg-cq8ec2ks1f4s73cjth00-a.oregon-postgres.render.com/post_z1ka')
 }
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
