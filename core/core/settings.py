@@ -17,7 +17,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'your-secret-key')
 DEBUG = True
 
 # Liste des hôtes autorisés
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
+ALLOWED_HOSTS =['job-7vcg.onrender.com', 'localhost', '*']
  
 # Application definition
 INSTALLED_APPS = [
