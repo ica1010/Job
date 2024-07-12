@@ -74,10 +74,14 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 # Base de données
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL'),
-        conn_max_age=600
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'job_a49b',
+        'USER': 'job_a49b_user',
+        'PASSWORD': 'xtJgMVaosRkC5QqkdbbwdZ5dmivr5BX3',
+        'HOST': 'dpg-cq84822ju9rs73c2dok0-a',
+        'PORT': '5432',  # Assurez-vous que ce port est correct
+    }
 }
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
