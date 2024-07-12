@@ -73,15 +73,9 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database documentation https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 # Base de données
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'job_a49b',
-        'USER': 'job_a49b_user',
-        'PASSWORD': 'xtJgMVaosRkC5QqkdbbwdZ5dmivr5BX3',
-        'HOST': 'dpg-cq84822ju9rs73c2dok0-a',
-        'PORT': '5432',  # Assurez-vous que ce port est correct
-    }
+    'default': dj_database_url.parse('postgresql://job_a49b_user:xtJgMVaosRkC5QqkdbbwdZ5dmivr5BX3@dpg-cq84822ju9rs73c2dok0-a.ohio-postgres.render.com/job_a49b')
 }
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
