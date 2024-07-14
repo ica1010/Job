@@ -1,6 +1,7 @@
 from datetime import datetime
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
+import requests
 from user.models import ProfileEmployeur
 from post.models import Category, Job, Locality
 from django.contrib.auth.decorators import login_required
@@ -85,7 +86,7 @@ def adminJobList(request):
 @login_required(login_url='/auth/sign-in/')
 def addjob(request):
 
-    # url = request.META.get('HTTP_REFERER')
+    url = request.META.get('HTTP_REFERER')
     cat = Category.objects.all()
     if request.method == 'POST' :
         job_title = request.POST['title']
@@ -144,13 +145,37 @@ def addjob(request):
             whatsapp =whatsapp
         )
     
-        for l in locality :
-            long, lat = [coord.strip() for coord in l.split(',')]
-            Locality.objects.create(
-                job = new_job,
-                latitude = lat,
-                longitude = long
-            )
+        # for l in locality :
+        #     long, lat = [coord.strip() for coord in l.split(',')]
+        #     Locality.objects.create(
+        #         job = new_job,
+        #         latitude = lat,
+        #         longitude = long
+        #     )
+        for loc in locality:
+            try:
+                parts = [coord.strip() for coord in loc.split(',')]
+                if len(parts) != 6:
+                    raise ValueError(f'Invalid number of values in coordinates: {loc}')
+                long, lat, country, region, city, district = parts
+                lat = float(lat)
+                long = float(long)
+
+                Locality.objects.create(
+                    job=new_job,
+                    latitude=lat,
+                    longitude=long,
+                    country=country,
+                    region=region,
+                    city=city,
+                    district=district
+                )
+            except ValueError as ve:
+                messages.error(request, str(ve))
+                return redirect(url)
+            except Exception as e:
+                messages.error(request, f'Error occurred: {str(e)}')
+                return redirect(url)
 
         if conpetence:
             for c in conpetence:
@@ -166,3 +191,5 @@ def addjob(request):
     }
     return render(request, 'addjobalert.html', context)
 
+def map(request):
+    return render(request, 'essaismap.html')

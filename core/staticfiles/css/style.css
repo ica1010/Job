@@ -68,21 +68,36 @@
 @import url("../icons/flaticon_1/flaticon_1.css");
 @import url("../icons/icomoon/icomoon.css");
 @import url("../icons/bootstrap-icons/font/bootstrap-icons.css");
-@import url(../vendor/metismenu/css/metisMenu.min.css);
+@import url("../vendor/metismenu/css/metisMenu.min.css");
+:root{
+	
+
+	/* Other */
+	--secondary: #232323;
+	--theme-text-color: #fff;
+	--title: #142238;
+		
+}
+
 :root {
-  --primary: #F93A0B;
   --secondary: #145650;
-  --primary-hover: #cc2c05;
-  --primary-dark: #681703;
-  --rgba-primary-1: rgba(249, 58, 11, 0.1);
-  --rgba-primary-2: rgba(249, 58, 11, 0.2);
-  --rgba-primary-3: rgba(249, 58, 11, 0.3);
-  --rgba-primary-4: rgba(249, 58, 11, 0.4);
-  --rgba-primary-5: rgba(249, 58, 11, 0.5);
-  --rgba-primary-6: rgba(249, 58, 11, 0.6);
-  --rgba-primary-7: rgba(249, 58, 11, 0.7);
-  --rgba-primary-8: rgba(249, 58, 11, 0.8);
-  --rgba-primary-9: rgba(249, 58, 11, 0.9);
+  	/* Primary */
+	--primary: #4885ED;
+	--primary-hover: #1f56b3;
+	--primary-dark: #1f56b3;
+	
+	/* Primary RGBA */
+	--rgba-primary-1: rgba(72,133,237,0.1);
+	--rgba-primary-3: rgba(72,133,237,0.3);
+	--rgba-primary-2: rgba(72,133,237,0.2);
+	--rgba-primary-4: rgba(72,133,237,0.4);
+	--rgba-primary-5: rgba(72,133,237,0.5);
+	--rgba-primary-05: rgba(72,133,237,0.05);
+	--rgba-primary-6: rgba(72,133,237,0.6);
+	--rgba-primary-7: rgba(72,133,237,0.7);
+	--rgba-primary-8: rgba(72,133,237,0.8);
+	--rgba-primary-9: rgba(72,133,237,0.9);
+	
   --font-family-base: Roboto, sans-serif;
   --font-family-title: Roboto, sans-serif;
   --title: #000;

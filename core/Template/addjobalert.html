@@ -1,7 +1,11 @@
 {% extends 'admin-base.html' %} {% load static %} {% block adminblock %}
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <!-- Leaflet Control Geocoder CSS -->
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet-fullscreen/dist/leaflet.fullscreen.css" />
+
 <!-- Select2 CSS -->
 <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css" /> -->
     <style>
@@ -19,6 +23,19 @@
                 </li>
             </ol>
         </div>
+        {% if messages %}
+                            
+        {% for message in messages  %}
+        <div class="page-titles">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active">
+                    <a href="javascript:void(0)">{{message}}</a>
+                </li>
+            </ol>
+        </div>
+        {% endfor %}
+    
+        {% endif %}
 
         <div class="row">
             <div class="col-xl-12">
@@ -128,14 +145,16 @@
                               
                                 <label class="form-label mt-5 text-center">Choisier vos enplacement</label>
 
-    <div class="col-12">
-        <!-- <input type="text" id="search-input" placeholder="Search location">
-        <button onclick="searchLocation()">Search</button> -->
-        <div id="map"></div>
-        <div class="mb-3 col-md-6">
-            <select id="marker-coordinates" style="width:100%;" multiple="multiple" name="locality" ></select>
-        </div>
-    </div>
+                                <div class="col-12">
+                                    <div id="map"></div>
+                                    <div class="mb-3 col-md-6">
+                                        <select id="marker-coordinates" style="width:100%;" multiple="multiple" name="locality"></select>
+                                    </div>
+                                    <div>
+                                        <input type="text" id="search-input" placeholder="Search location">
+                                        <button onclick="searchLocation()">Search</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -237,37 +256,31 @@
             </div>
         </div>
     </div>
-</div> 
-<!-- Leaflet JS -->
+</div> <!-- Leaflet CSS -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<!-- Leaflet Control Geocoder JS -->
 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-<!-- ES6 Promise Polyfill -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <script src="https://unpkg.com/es6-promise-polyfill/promise.min.js"></script>
-<!-- Fetch Polyfill -->
 <script src="https://unpkg.com/whatwg-fetch/fetch.js"></script>
-<!-- Select2 JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
-<!-- Votre JavaScript -->
 <script>
-    // Initialisation de la carte
-    var map = L.map('map').setView([48.8566, 2.3522], 13); // Coordonnées par défaut : Paris
+    var map = L.map('map').setView([48.8566, 2.3522], 13); // Default coordinates: Paris
     var markers = [];
     var lines = [];
     var polygons = [];
+    var geocoder = L.Control.Geocoder.nominatim();
 
-    // Ajouter les tuiles de carte
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    // Ajouter un contrôle de géocodage
-    L.Control.geocoder().addTo(map);
+    L.Control.geocoder({
+        geocoder: geocoder,
+        defaultMarkGeocode: false
+    }).addTo(map);
 
-    // Fonction pour ajouter un marqueur sur le clic de la carte
     map.on('click', function(e) {
         var marker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map)
-            .bindPopup('Emplacement choisi: ' + e.latlng.toString())
+            .bindPopup('Selected location: ' + e.latlng.toString())
             .openPopup();
         markers.push(marker);
         updateMarkerCoordinates();
@@ -275,16 +288,38 @@
         marker.on('click', function() {
             removeMarker(marker);
         });
+
+        geocoder.reverse(e.latlng, map.options.crs.scale(map.getZoom()), function(results) {
+            var result = results[0];
+            if (result && result.address) {
+                var address = result.address;
+                var country = address.country || '';
+                var region = address.state || '';
+                var city = address.city || address.town || '';
+                var district = address.suburb || '';
+                marker.bindPopup(`
+                    Selected location: ${e.latlng.toString()}<br>
+                    Country: ${country}<br>
+                    Region: ${region}<br>
+                    City: ${city}<br>
+                    District: ${district}
+                `).openPopup();
+
+                var existingValue = document.getElementById('marker-coordinates').value ? document.getElementById('marker-coordinates').value + '|' : '';
+                document.getElementById('marker-coordinates').value = existingValue + `${e.latlng.lng},${e.latlng.lat},${country},${region},${city},${district}`;
+            } else {
+                console.warn('Geocoding result does not contain address information.');
+            }
+        });
     });
 
-    // Récupérer la position actuelle de l'utilisateur
     window.onload = function() {
         navigator.geolocation.getCurrentPosition(function(position) {
             var lat = position.coords.latitude;
             var lng = position.coords.longitude;
             map.setView([lat, lng], 13);
             var marker = L.marker([lat, lng]).addTo(map)
-                .bindPopup('Votre position actuelle')
+                .bindPopup('Your current location')
                 .openPopup();
             markers.push(marker);
             updateMarkerCoordinates();
@@ -292,24 +327,45 @@
             marker.on('click', function() {
                 removeMarker(marker);
             });
+
+            geocoder.reverse([lat, lng], map.options.crs.scale(map.getZoom()), function(results) {
+                var result = results[0];
+                if (result && result.address) {
+                    var address = result.address;
+                    var country = address.country || '';
+                    var region = address.state || '';
+                    var city = address.city || address.town || '';
+                    var district = address.suburb || '';
+                    marker.bindPopup(`
+                        Your current location<br>
+                        Country: ${country}<br>
+                        Region: ${region}<br>
+                        City: ${city}<br>
+                        District: ${district}
+                    `).openPopup();
+
+                    var existingValue = document.getElementById('marker-coordinates').value ? document.getElementById('marker-coordinates').value + '|' : '';
+                    document.getElementById('marker-coordinates').value = existingValue + `${lng},${lat},${country},${region},${city},${district}`;
+                } else {
+                    console.warn('Geocoding result does not contain address information.');
+                }
+            });
         });
     };
 
-    // Fonction pour mettre à jour les coordonnées des marqueurs dans le sélecteur
     function updateMarkerCoordinates() {
         var $select = $('#marker-coordinates');
-        $select.empty(); // Vider les options existantes
+        $select.empty();
         markers.forEach(marker => {
             var latlng = marker.getLatLng();
-            var value = `${latlng.lat},${latlng.lng}`;
+            var value = `${latlng.lng},${latlng.lat}`;
             var text = `${latlng.lat}, ${latlng.lng}`;
-            var option = new Option(text, value, true, true); // Marquer toutes les options comme sélectionnées
+            var option = new Option(text, value, true, true);
             $select.append(option);
         });
-        $select.trigger('change'); // Déclencher l'événement change pour Select2
+        $select.trigger('change');
     }
 
-    // Fonction de recherche de lieu
     function searchLocation() {
         var searchInput = document.getElementById('search-input').value;
         if (!searchInput) return;
@@ -327,28 +383,21 @@
             });
     }
 
-    // Fonction pour retirer un marqueur
     function removeMarker(marker) {
         map.removeLayer(marker);
         markers = markers.filter(m => m !== marker);
         updateMarkerCoordinates();
     }
 
-    // Fonction pour ajouter une ligne à partir de deux points
     function addLine(latlngs) {
         var line = L.polyline(latlngs, {color: 'blue'}).addTo(map);
         lines.push(line);
     }
 
-    // Fonction pour ajouter un polygone
     function addPolygon(latlngs) {
         var polygon = L.polygon(latlngs, {color: 'green'}).addTo(map);
         polygons.push(polygon);
     }
-
-    // Exemple d'ajout de ligne et de polygone
-    // addLine([[48.8566, 2.3522], [48.8570, 2.3530]]);
-    // addPolygon([[48.8566, 2.3522], [48.8570, 2.3530], [48.8560, 2.3515]]);
 
     $(document).ready(function() {
         $('#marker-coordinates').select2();

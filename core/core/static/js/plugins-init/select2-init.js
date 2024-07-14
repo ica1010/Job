@@ -192,6 +192,8 @@
     tags: true,
   });
 
+ 
+
   // single-select-placeholder
   $(".single-select-placeholder").select2({
     placeholder: "Select a state",

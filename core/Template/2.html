@@ -1,0 +1,273 @@
+{% extends 'admin-base.html' %}
+{% load static %}
+{% block adminblock %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet-fullscreen/dist/leaflet.fullscreen.css" />
+<style>
+    #map {
+        height: 600px;
+    }
+
+    .controls {
+        margin: 10px;
+    }
+</style>
+<div class="content-body">
+
+    <h1>Leaflet Map avec Fonctionnalités Avancées</h1>
+    <input type="text" id="searchBox" placeholder="Rechercher un lieu">
+    <button id="searchButton">Rechercher</button>
+    <button id="clearMarkersButton">Supprimer Tous les Marqueurs</button>
+    <button id="locateButton">Trouver ma Position</button> <!-- Bouton pour trouver la position -->
+    <div class="controls">
+        <label>Type de carte:</label>
+        <div class="mb-3 col-md-6">
+            <select id="marker-coordinates" style="width:100%;" multiple="multiple" name="locality">
+                {% for marker in markers %}
+                    <option value="{{ marker.value }}" selected>{{ marker.label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <select id="mapType">
+            <option value="default">OpenStreetMap</option>
+            <option value="satellite">Satellite</option>
+            <option value="topo">Topographique</option>
+            <option value="transport">Transport</option>
+            <option value="toner">Toner</option>
+            <option value="watercolor">Watercolor</option>
+            <option value="osm-bright">OSM Bright</option>
+            <option value="esri">ESRI World Imagery</option>
+            <option value="terrain">Terrain</option>
+            <option value="streets">Streets</option>
+        </select>
+    </div>
+    <div id="map"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script src="https://unpkg.com/leaflet-fullscreen/dist/Leaflet.fullscreen.min.js"></script>
+    <script src="https://unpkg.com/es6-promise-polyfill/promise.min.js"></script>
+    <script src="https://unpkg.com/whatwg-fetch/fetch.js"></script>
+    <script>
+        // Initialize the map with a higher zoom capability
+        var map = L.map('map', {
+            center: [51.505, -0.09],
+            zoom: 13,
+            minZoom: 2, // Minimum zoom level
+            maxZoom: 20 // Maximum zoom level
+        });
+
+        // Define tile layers with extended zoom capability
+        var defaultLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            minZoom: 2,
+            maxZoom: 20,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        var satelliteLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            minZoom: 2,
+            maxZoom: 20,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>'
+        });
+
+        var topoLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+            minZoom: 2,
+            maxZoom: 17, // OpenTopoMap has a max zoom of 17
+            attribution: '&copy; <a href="https://opentopomap.org">OpenTopoMap</a> (CC-BY-SA), &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        });
+
+        var transportLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            minZoom: 2,
+            maxZoom: 20,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        });
+
+        var tonerLayer = L.tileLayer('https://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png', {
+            minZoom: 2,
+            maxZoom: 19,
+            attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, ' +
+                'under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, ' +
+                'under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.'
+        });
+
+        var watercolorLayer = L.tileLayer('https://{s}.tile.stamen.com/watercolor/{z}/{x}/{y}.png', {
+            minZoom: 2,
+            maxZoom: 16, // Watercolor layer has a max zoom of 16
+            attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, ' +
+                'under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, ' +
+                'under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.'
+        });
+
+        var osmBrightLayer = L.tileLayer('https://{s}.a.ssl.fastly.net/osm-bright/{z}/{x}/{y}.png', {
+            minZoom: 2,
+            maxZoom: 18,
+            attribution: 'Map tiles by <a href="https://github.com/CartoDB/OSM-Bright">OSM Bright</a>, ' +
+                'under <a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, ' +
+                'under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.'
+        });
+
+        var esriLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            minZoom: 2,
+            maxZoom: 18,
+            attribution: '&copy; <a href="https://www.esri.com/en-us/home">Esri</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        });
+
+        var terrainLayer = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/outdoors-v12/tiles/{z}/{x}/{y}?access_token=YOUR_MAPBOX_ACCESS_TOKEN', {
+            minZoom: 2,
+            maxZoom: 14,
+            attribution: '&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        });
+
+        var mapboxStreetsLayer = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v12/tiles/{z}/{x}/{y}?access_token=YOUR_MAPBOX_ACCESS_TOKEN', {
+            minZoom: 2,
+            maxZoom: 20,
+            attribution: '&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        });
+
+        var baseMaps = {
+            "OpenStreetMap": defaultLayer,
+            "Satellite": satelliteLayer,
+            "Topographique": topoLayer,
+            "Transport": transportLayer,
+            "Toner": tonerLayer,
+            "Watercolor": watercolorLayer,
+            "OSM Bright": osmBrightLayer,
+            "ESRI World Imagery": esriLayer,
+            "Terrain": terrainLayer,
+            "Streets": mapboxStreetsLayer
+        };
+
+        // Control to switch between layers
+        L.control.layers(baseMaps).addTo(map);
+
+        document.getElementById('mapType').addEventListener('change', function () {
+            var selectedLayer = this.value;
+
+            // Remove all layers and add the selected layer
+            map.eachLayer(function (layer) {
+                map.removeLayer(layer);
+            });
+
+            switch (selectedLayer) {
+                case 'default':
+                    map.removeLayer(satelliteLayer);
+                    map.removeLayer(topoLayer);
+                    map.removeLayer(transportLayer);
+                    map.removeLayer(tonerLayer);
+                    map.removeLayer(watercolorLayer);
+                    map.removeLayer(osmBrightLayer);
+                    map.removeLayer(esriLayer);
+                    map.removeLayer(terrainLayer);
+                    map.removeLayer(mapboxStreetsLayer);
+                    map.addLayer(defaultLayer);
+                    break;
+                case 'satellite':
+                    map.removeLayer(defaultLayer);
+                    map.addLayer(satelliteLayer);
+                    break;
+                case 'topo':
+                    map.removeLayer(defaultLayer);
+                    map.addLayer(topoLayer);
+                    break;
+                case 'transport':
+                    map.removeLayer(defaultLayer);
+                    map.addLayer(transportLayer);
+                    break;
+                case 'toner':
+                    map.removeLayer(defaultLayer);
+                    map.addLayer(tonerLayer);
+                    break;
+                case 'watercolor':
+                    map.removeLayer(defaultLayer);
+                    map.addLayer(watercolorLayer);
+                    break;
+                case 'osm-bright':
+                    map.removeLayer(defaultLayer);
+                    map.addLayer(osmBrightLayer);
+                    break;
+                case 'esri':
+                    map.removeLayer(defaultLayer);
+                    map.addLayer(esriLayer);
+                    break;
+                case 'terrain':
+                    map.removeLayer(defaultLayer);
+                    map.addLayer(terrainLayer);
+                    break;
+                case 'streets':
+                    map.removeLayer(defaultLayer);
+                    map.addLayer(mapboxStreetsLayer);
+                    break;
+                default:
+                    map.addLayer(defaultLayer);
+            }
+        });
+
+        // Add search functionality
+        var geocoder = L.Control.geocoder({
+            defaultMarkGeocode: false
+        }).on('markgeocode', function (e) {
+            var latlng = e.geocode.center;
+            map.setView(latlng, 13);
+            L.marker(latlng).addTo(map)
+                .bindPopup(e.geocode.name)
+                .openPopup();
+        }).addTo(map);
+
+        document.getElementById('searchButton').addEventListener('click', function () {
+            var searchValue = document.getElementById('searchBox').value;
+            geocoder.geocode(searchValue);
+        });
+
+        // Add fullscreen control
+        map.addControl(new L.Control.Fullscreen());
+
+        // Clear all markers functionality
+        document.getElementById('clearMarkersButton').addEventListener('click', function () {
+            map.eachLayer(function (layer) {
+                if (layer instanceof L.Marker) {
+                    map.removeLayer(layer);
+                }
+            });
+        });
+
+        // Add event listener for map clicks to add markers
+        map.on('click', function (e) {
+            var marker = L.marker(e.latlng).addTo(map)
+                .bindPopup('Coordonnées : ' + e.latlng.toString())
+                .openPopup();
+
+            var option = new Option(e.latlng.toString(), e.latlng, true, true);
+            document.getElementById('marker-coordinates').appendChild(option);
+        });
+
+        // Locate user functionality
+        document.getElementById('locateButton').addEventListener('click', function () {
+            map.locate({ setView: true, maxZoom: 16 });
+        });
+
+        // Handle location found event
+        map.on('locationfound', function (e) {
+            var radius = e.accuracy / 2;
+
+            L.marker(e.latlng).addTo(map)
+                .bindPopup("Vous êtes ici dans un rayon de " + radius + " mètres.").openPopup();
+
+            L.circle(e.latlng, radius).addTo(map);
+        });
+
+        // Handle location error event
+        map.on('locationerror', function (e) {
+            alert(e.message);
+        });
+
+        // Initialize the select2 plugin on the marker-coordinates select element
+        $(document).ready(function () {
+            $('#marker-coordinates').select2({
+                placeholder: 'Sélectionnez des coordonnées de marqueur',
+                allowClear: true
+            });
+        });
+    </script>
+</div>
+{% endblock %}
